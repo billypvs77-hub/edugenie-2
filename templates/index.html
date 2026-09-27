@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>EduGenie</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Welcome to EduGenie 🧞‍♂️✨</h1>
+    <p>Your personal AI tutor for learning support!</p>
+
+    <form id="qaForm">
+        <label><strong>Ask EduGenie a Question:</strong></label><br><br>
+        <input type="text" id="question" placeholder="Why is the sky blue?" required>
+        <button type="submit">Get Answer</button>
+    </form>
+    <div id="qaResult" class="output"></div>
+
+    <form id="summaryForm">
+        <label><strong>Summarize a Paragraph:</strong></label><br><br>
+        <input type="text" id="summaryText" placeholder="Paste long content to summarize" required>
+        <button type="submit">Summarize</button>
+    </form>
+    <div id="summaryResult" class="output"></div>
+
+    <form id="quizForm">
+        <label><strong>Generate a Quiz:</strong></label><br><br>
+        <input type="text" id="quizText" placeholder="Solar System" required>
+        <button type="submit">Generate Quiz</button>
+    </form>
+    <div id="quizResult" class="output"></div>
+
+    <form id="learnForm">
+        <label><strong>Get Learning Recommendations:</strong></label><br><br>
+        <input type="text" id="learnTopic" placeholder="e.g. Linear Regression" required>
+        <button type="submit">Get Recommendations</button>
+    </form>
+    <div id="learnResult" class="output"></div>
+
+    <script>
+        document.getElementById('qaForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const q = document.getElementById('question').value;
+            const res = await fetch(`/qa?question=${encodeURIComponent(q)}`);
+            const data = await res.json();
+            document.getElementById('qaResult').innerText = data.answer;
+        });
+
+        document.getElementById('summaryForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const t = document.getElementById('summaryText').value;
+            const res = await fetch(`/summarize?text=${encodeURIComponent(t)}`);
+            const data = await res.json();
+            document.getElementById('summaryResult').innerText = data.summary;
+        });
+
+        document.getElementById('quizForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const t = document.getElementById('quizText').value;
+            const res = await fetch(`/quiz?topic=${encodeURIComponent(t)}`);
+            const data = await res.json();
+            document.getElementById('quizResult').innerText = JSON.stringify(data.quiz, null, 2);
+        });
+
+        document.getElementById('learnForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const t = document.getElementById('learnTopic').value;
+            const res = await fetch(`/learn/recommendations?topic=${encodeURIComponent(t)}`);
+            const data = await res.json();
+            document.getElementById('learnResult').innerText = data.recommendation;
+        });
+    </script>
+</body>
+</html>
